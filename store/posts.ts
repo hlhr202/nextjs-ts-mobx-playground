@@ -28,7 +28,7 @@ export class PostsStore implements IRehydratable<PostsStore> {
         this.post = post;
     };
 
-    @action rehydrate = (instance: PostsStore) => {
+    rehydrate = (instance: PostsStore) => {
         this.posts = instance.posts;
         this.post = instance.post;
     };

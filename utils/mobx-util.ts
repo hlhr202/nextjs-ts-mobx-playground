@@ -7,7 +7,7 @@ export interface IMobxConstructor<T> {
 }
 
 export interface IRehydratable<T> {
-    rehydrate(instance: T): void;
+    rehydrate: (instance: T) => void;
 }
 
 export const isServer = typeof window === "undefined";
