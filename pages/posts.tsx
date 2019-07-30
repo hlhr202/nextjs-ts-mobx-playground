@@ -6,12 +6,9 @@ import { instantiate, isServer } from "../utils/mobx-util";
 
 const CounterPage: NextPage<{ postsStore: PostsStore }> = props => {
     const postsStore = isServer ? props.postsStore : instantiate(PostsStore);
-    useEffect(() => {
-        if (!postsStore.posts) {
-            postsStore.updatePosts(props.postsStore.posts || []);
-        }
-    }, []);
     const fetchSinglePost = useCallback(() => postsStore.fetchPost("1"), []);
+    useEffect(() => postsStore.rehydrate(props.postsStore), []);
+
     return useObserver(() => (
         <div>
             <button onClick={fetchSinglePost}>Fetch Single Post</button>

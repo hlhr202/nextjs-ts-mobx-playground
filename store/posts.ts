@@ -24,6 +24,11 @@ export class PostsStore {
         this.post = post;
     };
 
+    @action rehydrate = (instance: PostsStore) => {
+        this.posts = instance.posts;
+        this.post = instance.post;
+    };
+
     fetchPosts = async () => {
         const response = await Axios.get<IPost[]>(
             "https://jsonplaceholder.typicode.com/posts"
