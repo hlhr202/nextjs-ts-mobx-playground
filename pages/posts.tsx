@@ -1,13 +1,12 @@
 import { useObserver } from "mobx-react-lite";
-import { useEffect, useCallback } from "react";
+import { useCallback } from "react";
 import { PostsStore } from "../store/posts";
 import { NextPage } from "next";
-import { instantiate, isServer } from "../utils/mobx-util";
+import { instantiate, useRehydrated } from "../utils/mobx-util";
 
 const CounterPage: NextPage<{ postsStore: PostsStore }> = props => {
-    const postsStore = isServer ? props.postsStore : instantiate(PostsStore);
+    const postsStore = useRehydrated(PostsStore, props.postsStore);
     const fetchSinglePost = useCallback(() => postsStore.fetchPost("1"), []);
-    useEffect(() => postsStore.rehydrate(props.postsStore), []);
 
     return useObserver(() => (
         <div>

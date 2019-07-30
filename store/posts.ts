@@ -1,7 +1,7 @@
 import Axios from "axios";
 import { useStaticRendering } from "mobx-react-lite";
 import { observable, action } from "mobx";
-import { isServer } from "../utils/mobx-util";
+import { isServer, IRehydratable } from "../utils/mobx-util";
 
 useStaticRendering(isServer);
 
@@ -12,7 +12,11 @@ export interface IPost {
     body: string;
 }
 
-export class PostsStore {
+/**
+ * If you want client and server render store in same data
+ * Please implement a IRehydratable interface
+ */
+export class PostsStore implements IRehydratable<PostsStore> {
     @observable posts: IPost[] | null = null;
     @observable post: IPost | null = null;
 

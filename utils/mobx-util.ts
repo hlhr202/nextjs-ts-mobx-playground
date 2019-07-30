@@ -1,8 +1,13 @@
 import "reflect-metadata";
+import { useEffect } from "react";
 
 export interface IMobxConstructor<T> {
     new (...args: any): T;
     _$$instance?: T;
+}
+
+export interface IRehydratable<T> {
+    rehydrate(instance: T): void;
 }
 
 export const isServer = typeof window === "undefined";
@@ -27,6 +32,20 @@ export function instantiate<T>(
         }
         return storeConstructor._$$instance!;
     }
+}
+
+/**
+ * Rehydrate a client side store from server side store instance
+ * @param storeConstructor Constructor of mobx store
+ * @param instance Instance from server side rendering
+ */
+export function useRehydrated<T extends IRehydratable<T>>(
+    storeConstructor: IMobxConstructor<T>,
+    instance: InstanceType<IMobxConstructor<T>>
+) {
+    const store = isServer ? instance : instantiate(storeConstructor);
+    useEffect(() => store.rehydrate(instance), []);
+    return store;
 }
 
 /**
