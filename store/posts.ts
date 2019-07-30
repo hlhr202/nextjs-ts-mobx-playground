@@ -1,6 +1,6 @@
-import { observable, action } from "mobx";
-import { useStaticRendering } from "mobx-react-lite";
 import Axios from "axios";
+import { useStaticRendering } from "mobx-react-lite";
+import { observable, action } from "mobx";
 import { isServer } from "../utils/mobx-util";
 
 useStaticRendering(isServer);
@@ -16,7 +16,7 @@ export class PostsStore {
     @observable posts: IPost[] | null = null;
     @observable post: IPost | null = null;
 
-    @action.bound updatePosts = (posts: IPost[]) => {
+    @action updatePosts = (posts: IPost[]) => {
         this.posts = posts;
     };
 
@@ -32,7 +32,7 @@ export class PostsStore {
     };
 
     fetchPost = async (postId: string) => {
-        const response = await Axios.get(
+        const response = await Axios.get<IPost>(
             `https://jsonplaceholder.typicode.com/posts/${postId}`
         );
         this.updatePost(response.data);

@@ -1,13 +1,11 @@
+import { useObserver } from "mobx-react-lite";
+import { useEffect, useCallback } from "react";
+import { PostsStore } from "../store/posts";
 import { NextPage } from "next";
 import { instantiate, isServer } from "../utils/mobx-util";
-import { useObserver } from "mobx-react-lite";
-import { PostsStore } from "../store/posts";
-import { useEffect, useCallback } from "react";
 
 const CounterPage: NextPage<{ postsStore: PostsStore }> = props => {
-    const postsStore = isServer
-        ? props.postsStore
-        : instantiate<PostsStore>(PostsStore);
+    const postsStore = isServer ? props.postsStore : instantiate(PostsStore);
     useEffect(() => {
         if (!postsStore.posts) {
             postsStore.updatePosts(props.postsStore.posts || []);
@@ -43,7 +41,7 @@ const CounterPage: NextPage<{ postsStore: PostsStore }> = props => {
 };
 
 CounterPage.getInitialProps = async () => {
-    const postsStore = instantiate<PostsStore>(PostsStore);
+    const postsStore = instantiate(PostsStore);
     await postsStore.fetchPosts();
     return { postsStore };
 };
